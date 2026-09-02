@@ -324,7 +324,7 @@ export default function ActiveElections() {
                     </h3>
                     <div className="flex gap-3">
                         <Link
-                      href="/elections/add-candidates"
+                      href="/elections/elections-review"
                       className="inline-flex items-center gap-2.5 bg-[#14236F] hover:bg-[#1a2e8a] active:scale-[0.98] text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md cursor-pointer"
                     >
                       Review Pemilu
@@ -417,9 +417,7 @@ export default function ActiveElections() {
                                       .join(" • ")}
                                   </p>
                                 )}
-                                <span className="inline-block mt-2 text-[11px] font-mono text-gray-400 dark:text-gray-500">
-                                  {"ID Kandidat"}
-                                </span>
+                                
                               </div>
 
                               <div className="flex items-center gap-2 shrink-0">
