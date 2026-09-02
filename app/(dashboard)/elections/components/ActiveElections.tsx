@@ -288,7 +288,7 @@ export default function ActiveElections() {
             return (
               <div
                 key={electionId}
-                className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-sec overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* Election Card Header */}
                 <div className="bg-gradient-to-r from-[#14236F] via-[#1a2e8a] to-[#293681] p-6 text-white">
