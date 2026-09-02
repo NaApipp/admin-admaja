@@ -1,7 +1,7 @@
 import clientPromise from "@/app/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
-import { getCorsHeaders } from "@/app/lib/cors";
+import { getCorsHeaders, handleOptions } from "@/app/lib/cors";
 
 export async function DELETE(
   req: NextRequest,
@@ -52,3 +52,5 @@ export async function DELETE(
     );
   }
 }
+
+export const OPTIONS = handleOptions;
