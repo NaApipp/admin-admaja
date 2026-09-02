@@ -63,7 +63,7 @@ export default function LoginForm() {
   return (
     <div className="flex items-center justify-center px-4 py-12 min-h-screen bg-main">
       <div className="max-w-md w-full">
-        <div className="bg-[#14236F] rounded-lg shadow-xl overflow-hidden">
+        <div className="bg-sec rounded-lg shadow-xl overflow-hidden">
           <div className="p-8">
             <h2 className="text-center text-xl md:text-2xl font-extrabold text-white">
               Dashboard Admin <span className="text-[#FF0000]">Admaja</span>
