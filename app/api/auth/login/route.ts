@@ -48,6 +48,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validasi status akun (hanya akun 'aktif' yang diizinkan login)
+    if (user.status && user.status !== "aktif") {
+      const statusMessage =
+        user.status === "nonaktif" || user.status === "tidak aktif"
+          ? "Akun Anda telah dinonaktifkan. Silakan hubungi Super Admin."
+          : user.status === "purna"
+            ? "Akun Anda berstatus purna dan tidak memiliki akses login."
+            : "Akun Anda tidak aktif.";
+
+      return withCors(
+        NextResponse.json(
+          {
+            success: false,
+            message: statusMessage,
+          },
+          { status: 403 },
+        ),
+        req,
+      );
+    }
+
     // Generate JWT
     const secret = new TextEncoder().encode(
       process.env.JWT_SECRET || "default_secret",
@@ -59,19 +80,22 @@ export async function POST(req: NextRequest) {
       user_id: user.user_id || user._id.toString(), // Menggunakan idUser dari DB atau _id sebagai fallback
       name: user.name,
       role: user.role,
+      status: user.status || "aktif",
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
       .setJti(randomUUID())
-      .setExpirationTime("1d") // Token berlaku 1 tahun (unlimited simulasi)
+      .setExpirationTime("1d") // Token berlaku 1 hari
       .sign(secret);
 
     const refreshToken = await new SignJWT({
       user_id: user.user_id || user._id.toString(),
+      role: user.role,
+      status: user.status || "aktif",
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("1d")
+      .setExpirationTime("14d")
       .setJti(randomUUID())
       .sign(refreshSecret);
 
@@ -83,6 +107,7 @@ export async function POST(req: NextRequest) {
           user_id: user.user_id,
           name: user.name,
           role: user.role,
+          status: user.status || "aktif",
         },
         token_set: {
           token: token,
