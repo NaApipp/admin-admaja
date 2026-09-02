@@ -4,17 +4,32 @@ import { jwtVerify } from "jose";
 import clientPromise from "@/app/lib/mongodb";
 import { z } from "zod";
 
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 // Schema Zod
 const candidateSchema = z.object({
   elections_id: z.string().min(1, "Elections ID wajib diisi"),
   user: z.string().min(1, "Kandidat wajib diisi"),
   vision: z.string().min(1, "Visi wajib diisi"),
+  kelas: z.string().min(1, "Kelas wajib diisi"),
   mission: z
     .union([
-      z.array(z.string().min(1, "Item misi tidak boleh kosong")).min(1, "Minimal 1 misi harus diisi"),
-      z.string().min(1, "Misi tidak boleh kosong").transform((val) => [val]),
+      z
+        .array(z.string().min(1, "Item misi tidak boleh kosong"))
+        .min(1, "Minimal 1 misi harus diisi"),
+      z
+        .string()
+        .min(1, "Misi tidak boleh kosong")
+        .transform((val) => [val]),
     ])
     .transform((val) => (Array.isArray(val) ? val : [val])),
+  image: z.string().min(1, "Foto kandidat wajib diisi"),
   serial_number: z.union([
     z.number(),
     z.string().min(1, "Nomor urut wajib diisi"),
@@ -61,23 +76,63 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { elections_id, user, vision, mission, serial_number } =
-      result.data;
+    const {
+      elections_id,
+      user,
+      kelas,
+      vision,
+      mission,
+      image,
+      serial_number,
+    } = result.data;
 
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DATABASE);
     const candidatesCollection = db.collection("candidates");
 
-    // Cek duplikasi kandidat per election
+    // Cek duplikasi kandidat per election (nama atau nomor urut)
     const existing = await candidatesCollection.findOne({
-      user,
+      elections_id,
+      $or: [{ user }, { serial_number }],
     });
 
     if (existing) {
+      const duplicateMsg =
+        existing.user?.toLowerCase() === user.toLowerCase()
+          ? "Nama Kandidat Sudah Terdaftar pada Pemilihan ini"
+          : `Nomor urut ${serial_number} sudah digunakan pada pemilihan ini`;
+
       return withCors(
         NextResponse.json(
-          { success: false, message: "Nama Kandidat Sudah Terdaftar pada Pemilihan ini" },
+          {
+            success: false,
+            message: duplicateMsg,
+          },
           { status: 409 },
+        ),
+        req,
+      );
+    }
+
+    // Upload image to Cloudinary
+    let imageUrl = image;
+    let imagePublicId = "";
+    try {
+      const uploadResponse = await cloudinary.uploader.upload(image, {
+        folder: "admaja/candidates",
+        resource_type: "image",
+      });
+      imageUrl = uploadResponse.secure_url;
+      imagePublicId = uploadResponse.public_id;
+    } catch (uploadError) {
+      console.error("Cloudinary upload error:", uploadError);
+      return withCors(
+        NextResponse.json(
+          {
+            success: false,
+            message: "Gagal mengunggah foto kandidat ke Cloudinary",
+          },
+          { status: 500 },
         ),
         req,
       );
@@ -86,35 +141,39 @@ export async function POST(req: NextRequest) {
     const uniqueId = Math.random().toString(36).substring(2, 8).toUpperCase();
     const candidates_id = `CANDIDATE-${uniqueId}`;
 
-    await candidatesCollection.insertOne({
+    const candidateDoc = {
       candidates_id: candidates_id,
       elections_id: elections_id,
       serial_number: serial_number,
       user,
+      image: imageUrl,
+      foto_url: imageUrl,
+      image_public_id: imagePublicId,
+      candidate_data: {
+        name: user,
+        foto_url: imageUrl,
+        kelas: kelas,
+      },
       vision_mission: {
         vision: vision,
         mission: mission,
       },
-      
+      visi_misi: {
+        visi: vision,
+        misi: mission,
+      },
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    };
+
+    await candidatesCollection.insertOne(candidateDoc);
 
     return withCors(
       NextResponse.json(
         {
           success: true,
           message: "Kandidat berhasil ditambahkan",
-          data: {
-            candidates_id,
-            elections_id,
-            serial_number,
-            user,
-            vision_mission: {
-              vision: vision,
-              mission: mission,
-            },
-          },
+          data: candidateDoc,
         },
         { status: 201 },
       ),
