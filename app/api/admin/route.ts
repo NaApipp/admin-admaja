@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
         .max(100, "Password maksimal 100 karakter"),
 
       // Role
-      role: z.enum(["admin", "super_admin"], {
+      role: z.enum(["admin"], {
         message: "Role tidak valid",
       }),
 
@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
       user_id,
       name: name,
       angkatan: angkatan,
-      role: "admin",
+      role: role,
       status: status,
       password: hashedPassword,
       createdAt: formattedDate,
@@ -168,16 +168,16 @@ export async function GET(req: NextRequest) {
 
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DATABASE);
-    const electionCollection = db.collection("user_admin");
+    const usersCollection = db.collection("user_admin");
 
-    const elections = await electionCollection.find({}).toArray();
+    const users = await usersCollection.find({}).toArray();
 
     return withCors(
       NextResponse.json(
         {
           success: true,
           message: "Data Admin berhasil diambil",
-          data: elections,
+          data: users,
         },
         { status: 200 },
       ),
