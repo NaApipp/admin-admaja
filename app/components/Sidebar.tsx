@@ -66,7 +66,7 @@ export default function Sidebar() {
     },
     {
       name: "Member / Anggota",
-      href: "/members",
+      href: "/member",
       icon: Users,
     },
     {
@@ -130,7 +130,7 @@ export default function Sidebar() {
           <ul className="space-y-1.5">
             {visibleMenuItems.map((item) => {
               const Icon = item.icon;
-            //   const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+              //   const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
 
               return (
                 <li key={item.name}>

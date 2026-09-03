@@ -85,7 +85,7 @@ export default function Navbar() {
     },
     {
       name: "Member / Anggota",
-      href: "/members",
+      href: "/member",
       icon: Users,
     },
     {
