@@ -178,6 +178,7 @@ export async function GET(req: NextRequest) {
           success: true,
           message: "Data Admin berhasil diambil",
           data: users,
+          total: users.length
         },
         { status: 200 },
       ),

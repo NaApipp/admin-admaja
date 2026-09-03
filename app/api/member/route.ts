@@ -189,16 +189,17 @@ export async function GET(req: NextRequest) {
 
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DATABASE);
-    const electionCollection = db.collection("user_member");
+    const usersCollection = db.collection("user_member");
 
-    const elections = await electionCollection.find({}).toArray();
+    const users = await usersCollection.find({}).toArray();
 
     return withCors(
       NextResponse.json(
         {
           success: true,
           message: "Data Anggota berhasil diambil",
-          data: elections,
+          data: users,
+          total: users.length
         },
         { status: 200 },
       ),
