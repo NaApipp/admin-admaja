@@ -150,12 +150,6 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2.5">
-            {userName && (
-              <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 text-xs font-semibold text-blue-100">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span className="max-w-[120px] truncate">{userName}</span>
-              </div>
-            )}
 
             {/* Hamburger Toggle */}
             <button
