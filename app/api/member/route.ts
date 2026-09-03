@@ -65,11 +65,8 @@ export async function POST(req: NextRequest) {
       angkatan: z
         .string()
         .trim()
-        .min(1, "Angkatan harus diisi")
-        .regex(/^\d{4}$/, {
-          message: "Angkatan harus berupa 4 digit angka",
-        }),
-
+        .min(1, "Angkatan harus diisi"),
+        .max(4, "Angkatan maksimal 4 karakter"),
       // NISN
       nisn: z
         .string()
