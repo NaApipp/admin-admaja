@@ -60,6 +60,16 @@ export default function LoginForm() {
     }
   };
 
+  const message = `Halo,
+
+Saya mengalami kendala saat mencoba login ke dashboard admin admaja. Apakah bisa dibantu untuk mengecek dan mengatasi kendala tersebut?
+
+Terima kasih atas bantuannya.`;
+
+  const whatsappUrl = `https://wa.me/6289531310903?text=${encodeURIComponent(
+    message,
+  )}`;
+
   return (
     <div className="flex items-center justify-center px-4 py-12 min-h-screen bg-main">
       <div className="max-w-md w-full">
@@ -68,9 +78,7 @@ export default function LoginForm() {
             <h2 className="text-center text-xl md:text-2xl font-extrabold text-white">
               Dashboard Admin <span className="text-[#FF0000]">Admaja</span>
             </h2>
-            <p className="mt-4 text-center text-gray-400">
-              Silahkan Login
-            </p>
+            <p className="mt-4 text-center text-gray-400">Silahkan Login</p>
 
             {error && (
               <div className="mt-4 p-3 bg-red-500/20 border border-red-500 text-red-500 rounded-md text-sm text-center">
@@ -123,7 +131,11 @@ export default function LoginForm() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3.5 flex items-center text-slate-400 hover:text-white transition-colors focus:outline-none cursor-pointer"
-                    aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                    aria-label={
+                      showPassword
+                        ? "Sembunyikan kata sandi"
+                        : "Tampilkan kata sandi"
+                    }
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5 stroke-[1.75]" />
@@ -138,7 +150,14 @@ export default function LoginForm() {
                 <div className="text-sm">
                   <p className="font-medium text-white cursor-pointer">
                     Lupa Password?{" "}
-                    <span className="text-white">Hubungi Admin</span>
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white"
+                    >
+                      Hubungi Developer
+                    </a>
                   </p>
                 </div>
               </div>
@@ -150,8 +169,8 @@ export default function LoginForm() {
                             border border-transparent text-sm font-semibold
                               text-[#14236F] bg-white hover:bg-white/80 focus:outline-none 
                               focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                    loading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                                loading ? "opacity-50 cursor-not-allowed" : ""
+                              }`}
                   type="submit"
                 >
                   {loading ? "Memproses..." : "Masuk"}
@@ -161,13 +180,9 @@ export default function LoginForm() {
           </div>
         </div>
         <div className="px-8 py-4 text-center flex justify-center gap-2">
-            <span className="text-white">Belum punya akun?</span>{" "}
-            <p
-              className="font-medium text-[#FFDDB5]"
-            >
-              Hubungi Admin
-            </p>
-          </div>
+          <span className="text-white">Belum punya akun?</span>{" "}
+          <p className="font-medium text-[#FFDDB5]">Hubungi Admin</p>
+        </div>
       </div>
     </div>
   );
