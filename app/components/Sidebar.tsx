@@ -12,6 +12,7 @@ import {
   ShieldAlert,
   LogOut,
   Lock,
+  Book,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -63,6 +64,11 @@ export default function Sidebar() {
       name: "Absensi",
       href: "/attendance",
       icon: CalendarCheck,
+    },
+    {
+      name: "Manage Content",
+      href: "/content",
+      icon: Book,
     },
     {
       name: "Member / Anggota",

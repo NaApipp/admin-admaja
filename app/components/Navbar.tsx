@@ -14,6 +14,7 @@ import {
   Lock,
   Menu,
   X,
+  Book,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -82,6 +83,11 @@ export default function Navbar() {
       name: "Absensi",
       href: "/attendance",
       icon: CalendarCheck,
+    },
+    {
+      name: "Manage Content",
+      href: "/content",
+      icon: Book,
     },
     {
       name: "Member / Anggota",
