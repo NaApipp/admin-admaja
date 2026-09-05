@@ -95,7 +95,9 @@ export default function ActiveElections() {
 
       // Filter hanya election dengan status 'dibuka'
       const openElections = allElections.filter(
-        (election) => election.status?.toLowerCase() === "dibuka",
+        (election) =>
+          election.status?.toLowerCase() === "dibuka" ||
+          election.status?.toLowerCase() === "draft",
       );
 
       setActiveElections(openElections);
@@ -131,7 +133,9 @@ export default function ActiveElections() {
         if (!ignore) {
           const allElections: Election[] = electionsJson.data || [];
           const openElections = allElections.filter(
-            (election) => election.status?.toLowerCase() === "dibuka",
+            (election) =>
+              election.status?.toLowerCase() === "dibuka" ||
+              election.status?.toLowerCase() === "draft",
           );
           setActiveElections(openElections);
           setCandidates(candidatesJson.data || []);
@@ -295,9 +299,9 @@ export default function ActiveElections() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-2.5">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 border border-emerald-400/30 text-emerald-300">
+                        <span className="inline-flex uppercase items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 border border-emerald-400/30 text-emerald-300">
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                          Status: Dibuka
+                          Status: {election.status}
                         </span>
                       </div>
                       <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">

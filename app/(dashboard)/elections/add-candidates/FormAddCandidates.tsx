@@ -58,7 +58,11 @@ export default function FormAddCandidates() {
         const json = await res.json();
         if (!ignore) {
           const all: Election[] = json.data || [];
-          setElections(all.filter((e) => e.status === "dibuka"));
+          setElections(
+            all.filter(
+              (e) => e.status?.toLowerCase() === "dibuka" || e.status === "draft",
+            ),
+          );
         }
       } catch {
         // silently fail
@@ -315,8 +319,8 @@ export default function FormAddCandidates() {
               )}
               {elections.length === 0 && !electionsLoading && (
                 <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
-                  Tidak ada periode pemilu yang sedang dibuka. Buka periode
-                  pemilu terlebih dahulu.
+                  Tidak ada periode pemilihan yang berstatus draft atau terbuka. Buka periode
+                  pemilihan terlebih dahulu.
                 </p>
               )}
             </div>
