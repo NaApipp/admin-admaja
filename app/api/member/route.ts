@@ -104,9 +104,11 @@ export async function POST(req: NextRequest) {
     const db = client.db(process.env.MONGODB_DATABASE);
     const usersCollection = db.collection("user_member");
 
-    //  Vakidation check on db name
+    const formattedName = name.trim().toUpperCase();
+
+    //  Validation check on db name
     const existingUser = await usersCollection.findOne({
-      $or: [{ name }, { nisn }],
+      $or: [{ name: formattedName }, { nisn }],
     });
     if (existingUser) {
       return withCors(
@@ -130,7 +132,7 @@ export async function POST(req: NextRequest) {
     // Saving New User
     const result = await usersCollection.insertOne({
       user_id,
-      name: name,
+      name: formattedName,
       angkatan: angkatan,
       kelas: kelas,
       nisn: nisn,

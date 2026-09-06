@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
     const now = new Date();
     const documents = memberList.map((item) => ({
       user_id: `USR-ANGT-M-${item.nisn}-${item.angkatan}`,
-      name: item.name,
+      name: item.name.trim().toUpperCase(),
       angkatan: item.angkatan,
       kelas: item.kelas,
       nisn: item.nisn,
