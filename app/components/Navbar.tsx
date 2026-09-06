@@ -19,9 +19,15 @@ import {
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+
+  // Auto close menu saat berpindah halaman
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
   const [role, setRole] = useState<string | null>(() => {
     if (typeof window === "undefined") return null;
     try {
@@ -134,6 +140,7 @@ export default function Navbar() {
           {/* Logo & Brand */}
           <Link
             href="/general"
+            onClick={() => setIsOpen(false)}
             className="flex items-center gap-2.5 focus:outline-none"
           >
             <Image
@@ -171,8 +178,14 @@ export default function Navbar() {
 
       {/* Mobile Drawer / Dropdown */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-xs">
-          <div className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-sec border-b border-[#1e3388] text-white p-5 flex flex-col justify-between">
+        <div 
+          className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-xs"
+          onClick={() => setIsOpen(false)}
+        >
+          <div 
+            className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-sec border-b border-[#1e3388] text-white p-5 flex flex-col justify-between"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Nav Menu */}
             <div className="space-y-4">
               <nav>
@@ -184,6 +197,7 @@ export default function Navbar() {
                       <li key={item.name}>
                         <Link
                           href={item.href}
+                          onClick={() => setIsOpen(false)}
                           className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all`}
                         >
                           <Icon className="w-4 h-4 shrink-0" />
