@@ -5,16 +5,15 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function AddAdmin() {
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
 
-
   const [formData, setFormData] = useState({
     name: "",
+    username: "",
     angkatan: "",
     password: "",
     role: "",
@@ -37,7 +36,7 @@ export default function AddAdmin() {
 
       const data = await res.json();
 
-      if(!res.ok){
+      if (!res.ok) {
         throw new Error(data.message || "Gagal menambahkan admin");
       }
 
@@ -47,6 +46,7 @@ export default function AddAdmin() {
       });
       setFormData({
         name: "",
+        username: "",
         angkatan: "",
         password: "",
         role: "",
@@ -73,7 +73,10 @@ export default function AddAdmin() {
   return (
     <div className="flex items-center justify-center">
       <div className="relative py-3 sm:max-w-xs sm:mx-auto">
-        <form onSubmit={handleAddUser} className="min-h-96 px-8 py-6 mt-4 text-left bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+        <form
+          onSubmit={handleAddUser}
+          className="min-h-96 px-8 py-6 mt-4 text-left bg-white dark:bg-gray-900 rounded-xl shadow-lg"
+        >
           <div className="flex flex-col justify-center items-center h-full select-none">
             <div className="flex flex-col items-center justify-center gap-2 mb-8">
               <Image src="/logo-v2.png" alt="Logo" width={50} height={50} />
@@ -85,76 +88,89 @@ export default function AddAdmin() {
               </span>
             </div>
             {/* form data */}
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {/* Name */}
+              <div className="w-full flex flex-col gap-2 mb-5">
+                <label className="font-semibold text-xs text-gray-400">
+                  Nama
+                </label>
+                <input
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  placeholder="Nama"
+                  className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
+                />
+              </div>
+
+              {/* Angktan */}
+              <div className="w-full flex flex-col gap-2 mb-5">
+                <label className="font-semibold text-xs text-gray-400">
+                  Angkatan
+                </label>
+                <input
+                  type="angkatan "
+                  value={formData.angkatan}
+                  onChange={(e) =>
+                    setFormData({ ...formData, angkatan: e.target.value })
+                  }
+                  placeholder="Angkatan"
+                  className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
+                />
+              </div>
+
+              {/* Sttaus */}
+              <div className="w-full flex flex-col gap-2 mb-5">
+                <label className="font-semibold text-xs text-gray-400">
+                  Status
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) =>
+                    setFormData({ ...formData, status: e.target.value })
+                  }
+                  className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
+                >
+                  <option value="">Pilih Status Admin</option>
+                  <option value="aktif">Aktif</option>
+                  <option value="nonaktif">Non Aktif</option>
+                  <option value="purnabakti">Purnabakti</option>
+                </select>
+              </div>
+
+              {/* Role */}
+              <div className="w-full flex flex-col gap-2 mb-5">
+                <label className="font-semibold text-xs text-gray-400">
+                  Role
+                </label>
+                <select
+                  value={formData.role}
+                  onChange={(e) =>
+                    setFormData({ ...formData, role: e.target.value })
+                  }
+                  className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
+                >
+                  <option value="">Pilih Role Admin</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+            {/* Username */}
             <div className="w-full flex flex-col gap-2 mb-5">
               <label className="font-semibold text-xs text-gray-400">
-                Nama
+                Username
               </label>
               <input
-                value={formData.name}
+                value={formData.username}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                  setFormData({ ...formData, username: e.target.value })
                 }
-                placeholder="Nama"
+                placeholder="n_apippp"
                 className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
               />
             </div>
-
-            {/* Angktan */}
-            <div className="w-full flex flex-col gap-2 mb-5">
-              <label className="font-semibold text-xs text-gray-400">
-                Angkatan
-              </label>
-              <input
-                type="angkatan "
-                value={formData.angkatan }
-                onChange={(e) =>
-                  setFormData({ ...formData, angkatan : e.target.value })
-                }
-                placeholder="Angkatan"
-                className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
-              />
-            </div>
-            
-            {/* Sttaus */}
-            <div className="w-full flex flex-col gap-2 mb-5">
-              <label className="font-semibold text-xs text-gray-400">
-                Status
-              </label>
-              <select
-                value={formData.status}
-                onChange={(e) =>
-                  setFormData({ ...formData, status: e.target.value })
-                }
-                className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
-              >
-                <option value="">Pilih Status Admin</option>
-                <option value="aktif">Aktif</option>
-                <option value="nonaktif">Non Aktif</option>
-                <option value="purnabakti">Purnabakti</option>
-              </select>
-            </div>
-
-            {/* Role */}
-            <div className="w-full flex flex-col gap-2 mb-5">
-              <label className="font-semibold text-xs text-gray-400">
-                Role
-              </label>
-              <select
-                value={formData.role}
-                onChange={(e) =>
-                  setFormData({ ...formData, role: e.target.value })
-                }
-                className="border rounded-lg px-3 py-2 text-sm w-full outline-none dark:border-gray-500 dark:bg-gray-900"
-              >
-                <option value="">Pilih Role Admin</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            </div>
-
             {/* Password */}
             <div className="w-full flex flex-col gap-2 mb-5">
               <label className="font-semibold text-xs text-gray-400">
@@ -187,9 +203,11 @@ export default function AddAdmin() {
           </div>
 
           {message && (
-            <div className={`mb-4 text-xs font-medium ${
-              message.type === 'success' ? 'text-green-500' : 'text-red-500'
-            }`}>
+            <div
+              className={`mb-4 text-xs font-medium ${
+                message.type === "success" ? "text-green-500" : "text-red-500"
+              }`}
+            >
               {message.text}
             </div>
           )}
@@ -201,8 +219,6 @@ export default function AddAdmin() {
           >
             {loading ? "Memproses..." : "Tambah User Admin"}
           </button>
-
-          
         </form>
       </div>
     </div>
