@@ -6,7 +6,7 @@ import { User, Lock, Eye, EyeOff } from "lucide-react";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -99,14 +99,14 @@ Terima kasih atas bantuannya.`;
                     <User className="w-5 h-5 stroke-[1.75]" />
                   </div>
                   <input
-                    placeholder="Name"
+                    placeholder="Username"
                     className="w-full bg-transparent py-3 pl-11 pr-4 text-white placeholder:text-slate-400 text-sm focus:outline-none"
                     required
-                    autoComplete="name"
+                    autoComplete="username"
                     type="text"
-                    name="name"
-                    id="name"
-                    value={formData.name}
+                    name="username"
+                    id="username"
+                    value={formData.username}
                     onChange={handleChange}
                   />
                 </div>
