@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
         .trim()
         .min(1, "Nama depan harus diisi")
         .max(50, "Nama depan maksimal 50 karakter"),
-        // .regex(/^[A-Za-zÀ-ÿ\s]+$/, {
-        //   message: "Nama depan hanya boleh mengandung huruf dan spasi",
-        // }),
+      // .regex(/^[A-Za-zÀ-ÿ\s]+$/, {
+      //   message: "Nama depan hanya boleh mengandung huruf dan spasi",
+      // }),
 
       // Angkatan
       angkatan: z
@@ -45,6 +45,27 @@ export async function POST(req: NextRequest) {
         .min(1, "Angkatan harus diisi")
         .regex(/^\d{4}$/, {
           message: "Angkatan harus berupa 4 digit angka",
+        }),
+
+      // Username
+      username: z
+        .string()
+        .trim()
+        .min(5, "Username minimal 5 karakter")
+        .max(30, "Username maksimal 30 karakter")
+        .regex(/^[a-zA-Z0-9_]+$/, {
+          message:
+            "Username hanya boleh mengandung huruf, angka, dan underscore",
+        })
+        .refine((val) => !val.includes(" "), {
+          message: "Username tidak boleh berisi spasi",
+        })
+        .refine((val) => val === val.trim(), {
+          message: "Username tidak boleh diawali atau diakhiri spasi",
+        })
+        // Validasi Tidak Boleh Hanya Angka
+        .refine((val) => !/^\d+$/.test(val), {
+          message: "Username tidak boleh hanya angka",
         }),
 
       // Validasi Level
@@ -79,7 +100,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name, angkatan, password, role, status } = validation.data;
+    const { name, username, angkatan, password, role, status } =
+      validation.data;
 
     const client = await clientPromise;
     // DB and Colecction Name
@@ -88,11 +110,11 @@ export async function POST(req: NextRequest) {
 
     //  Vakidation check on db name
     const existingUser = await usersCollection.findOne({
-      $or: [{ name }],
+      $or: [{ username }],
     });
     if (existingUser) {
       return withCors(
-        NextResponse.json({ message: "Nama sudah terdaftar" }, { status: 400 }),
+        NextResponse.json({ message: "Username sudah terdaftar" }, { status: 400 }),
         req,
       );
     }
@@ -113,6 +135,7 @@ export async function POST(req: NextRequest) {
     const result = await usersCollection.insertOne({
       user_id,
       name: name,
+      username: username,
       angkatan: angkatan,
       role: role,
       status: status,

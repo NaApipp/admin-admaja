@@ -7,10 +7,10 @@ import { randomUUID } from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, password } = await req.json();
+    const { username, password } = await req.json();
 
     // Validasi input sederhana
-    if (!name || !password) {
+    if (!username || !password) {
       return withCors(
         NextResponse.json(
           { message: "Nama dan password harus diisi" },
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const usersCollection = db.collection("user_admin");
 
     // Cari user berdasarkan email
-    const user = await usersCollection.findOne({ name });
+    const user = await usersCollection.findOne({ username });
     if (!user) {
       return withCors(
         NextResponse.json(
@@ -79,6 +79,7 @@ export async function POST(req: NextRequest) {
     const token = await new SignJWT({
       user_id: user.user_id || user._id.toString(), // Menggunakan idUser dari DB atau _id sebagai fallback
       name: user.name,
+      username: user.username,
       role: user.role,
       status: user.status || "aktif",
     })
@@ -106,6 +107,7 @@ export async function POST(req: NextRequest) {
         user: {
           user_id: user.user_id,
           name: user.name,
+          username: user.username,
           role: user.role,
           status: user.status || "aktif",
         },

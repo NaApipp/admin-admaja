@@ -39,6 +39,26 @@ export async function POST(req: NextRequest) {
       //   message: "Nama depan hanya boleh mengandung huruf dan spasi",
       // }),
 
+      // Username
+      username: z
+        .string()
+        .trim()
+        .min(5, "Username minimal 5 karakter")
+        .max(30, "Username maksimal 30 karakter")
+        .regex(/^[a-zA-Z0-9_]+$/, {
+          message: "Username hanya boleh mengandung huruf, angka, dan underscore",
+        })
+        .refine((val) => !val.includes(" "), {
+          message: "Username tidak boleh berisi spasi",
+        })
+        .refine((val) => val === val.trim(), {
+          message: "Username tidak boleh diawali atau diakhiri spasi",
+        })
+        // Validasi Tidak Boleh Hanya Angka
+        .refine((val) => !/^\d+$/.test(val), {
+          message: "Username tidak boleh hanya angka",
+        }),
+
       // Angkatan
       angkatan: z
         .string()
@@ -80,7 +100,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name, angkatan, password, role, status } = validation.data;
+    const { name, username, angkatan, password, role, status } = validation.data;
 
     const client = await clientPromise;
     // DB and Colecction Name
@@ -114,6 +134,7 @@ export async function POST(req: NextRequest) {
     const result = await usersCollection.insertOne({
       user_id,
       name: name,
+      username: username,
       angkatan: angkatan,
       role: role,
       status: status,
