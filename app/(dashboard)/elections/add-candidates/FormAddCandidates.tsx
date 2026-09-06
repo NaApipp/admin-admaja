@@ -12,6 +12,7 @@ import {
   Users,
   Quote,
   ListChecks,
+  ClipboardList,
   Hash,
   Vote,
   GraduationCap,
@@ -47,6 +48,7 @@ export default function FormAddCandidates() {
     image: "",
   });
   const [missionList, setMissionList] = useState<string[]>([""]);
+  const [actionPlanList, setActionPlanList] = useState<string[]>([""]);
 
   // Fetch daftar elections (hanya yang statusnya dibuka)
   useEffect(() => {
@@ -149,6 +151,24 @@ export default function FormAddCandidates() {
     setMissionList((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Action plan list handlers
+  const handleActionPlanChange = (index: number, value: string) => {
+    setActionPlanList((prev) => {
+      const next = [...prev];
+      next[index] = value;
+      return next;
+    });
+  };
+
+  const addActionPlanItem = () => {
+    setActionPlanList((prev) => [...prev, ""]);
+  };
+
+  const removeActionPlanItem = (index: number) => {
+    if (actionPlanList.length <= 1) return;
+    setActionPlanList((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const resetForm = () => {
     setFormData({
       elections_id: "",
@@ -159,6 +179,7 @@ export default function FormAddCandidates() {
       image: "",
     });
     setMissionList([""]);
+    setActionPlanList([""]);
     setMessage({ type: "", text: "" });
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -204,6 +225,16 @@ export default function FormAddCandidates() {
       setMessage({ type: "error", text: "Minimal 1 misi wajib diisi." });
       return;
     }
+    const actionPlan = actionPlanList
+      .map((ap) => ap.trim())
+      .filter((ap) => ap.length > 0);
+    if (actionPlan.length === 0) {
+      setMessage({
+        type: "error",
+        text: "Minimal 1 program kerja wajib diisi.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -218,6 +249,7 @@ export default function FormAddCandidates() {
           serial_number: Number(formData.serial_number),
           vision: formData.vision.trim(),
           mission: missions,
+          action_plan: actionPlan,
           image: formData.image,
         }),
       });
@@ -549,6 +581,65 @@ export default function FormAddCandidates() {
 
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
               Masukkan poin-poin misi kandidat secara terpisah. Minimal 1 misi
+              wajib diisi.
+            </p>
+          </div>
+
+          {/* Section 4: Program Kerja (Action Plan) */}
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <ClipboardList className="w-4 h-4 text-[#14236F] dark:text-blue-400" />
+                <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide">
+                  Program Kerja
+                </h2>
+                <span className="text-xs font-mono bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded-md">
+                  {actionPlanList.filter((ap) => ap.trim()).length} item
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={addActionPlanItem}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#14236F] dark:text-blue-400 hover:text-[#1a2e8a] dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/40 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Tambah Proker
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {actionPlanList.map((proker, idx) => (
+                <div key={idx} className="flex items-start gap-2.5">
+                  {/* Nomor Proker */}
+                  <div className="shrink-0 flex items-center justify-center w-7 h-7 mt-1.5 rounded-full bg-[#14236F] text-white text-xs font-bold">
+                    {idx + 1}
+                  </div>
+
+                  {/* Input Proker */}
+                  <input
+                    type="text"
+                    placeholder={`Program kerja ke-${idx + 1}...`}
+                    value={proker}
+                    onChange={(e) => handleActionPlanChange(idx, e.target.value)}
+                    className="flex-1 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#14236F] dark:focus:ring-blue-500 transition-all"
+                  />
+
+                  {/* Remove button */}
+                  <button
+                    type="button"
+                    disabled={actionPlanList.length <= 1}
+                    onClick={() => removeActionPlanItem(idx)}
+                    className="shrink-0 p-2 mt-1 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+              Masukkan program kerja kandidat secara terpisah. Minimal 1 program kerja
               wajib diisi.
             </p>
           </div>

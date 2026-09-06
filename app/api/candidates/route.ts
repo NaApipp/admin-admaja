@@ -29,6 +29,17 @@ const candidateSchema = z.object({
         .transform((val) => [val]),
     ])
     .transform((val) => (Array.isArray(val) ? val : [val])),
+  action_plan: z
+    .union([
+      z
+        .array(z.string().min(1, "Item proker tidak boleh kosong"))
+        .min(1, "Minimal 1 proker harus diisi"),
+      z
+        .string()
+        .min(1, "Proker tidak boleh kosong")
+        .transform((val) => [val]),
+    ])
+    .transform((val) => (Array.isArray(val) ? val : [val])),
   image: z.string().min(1, "Foto kandidat wajib diisi"),
   serial_number: z.union([
     z.number(),
@@ -82,6 +93,7 @@ export async function POST(req: NextRequest) {
       kelas,
       vision,
       mission,
+      action_plan,
       image,
       serial_number,
     } = result.data;
@@ -157,10 +169,12 @@ export async function POST(req: NextRequest) {
       vision_mission: {
         vision: vision,
         mission: mission,
+        action_plan: action_plan,
       },
       visi_misi: {
         visi: vision,
         misi: mission,
+        action_plan: action_plan,
       },
       createdAt: new Date(),
       updatedAt: new Date(),
