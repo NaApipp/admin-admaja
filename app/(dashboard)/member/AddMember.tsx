@@ -86,10 +86,10 @@ export default function AddMember({ onSuccess }: AddMemberProps) {
       setMessage({ type: "error", text: "Kelas wajib diisi" });
       return;
     }
-    if (formData.kelas.length < 1 || formData.kelas.length > 10) {
+    if (formData.kelas.length < 1 || formData.kelas.length > 20) {
       setMessage({
         type: "error",
-        text: "Kelas minimal 1 dan maksimal 10 karakter",
+        text: "Kelas minimal 1 dan maksimal 20 karakter",
       });
       return;
     }
