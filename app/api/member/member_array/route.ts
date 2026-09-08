@@ -22,8 +22,8 @@ const memberItemSchema = z.object({
   angkatan: z
     .union([z.string(), z.number()])
     .transform((v) => String(v).trim())
-    .refine((v) => /^\d{4}$/.test(v), {
-      message: "Angkatan harus berupa 4 digit angka",
+    .refine((v) => /^\d{2}$/.test(v), {
+      message: "Angkatan harus berupa 2 digit angka",
     }),
 
   // NISN (menerima "1234567890" maupun 1234567890)

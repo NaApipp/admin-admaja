@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
         .string()
         .trim()
         .min(1, "Angkatan harus diisi")
-        .max(4, "Angkatan maksimal 4 karakter"),
+        .max(2, "Angkatan maksimal 2 karakter"),
       // NISN
       nisn: z
         .string()
