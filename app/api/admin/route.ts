@@ -64,8 +64,8 @@ export async function POST(req: NextRequest) {
         .string()
         .trim()
         .min(1, "Angkatan harus diisi")
-        .regex(/^\d{4}$/, {
-          message: "Angkatan harus berupa 4 digit angka",
+        .regex(/^\d{2}$/, {
+          message: "Angkatan harus berupa 2 digit angka",
         }),
 
       // Validasi Level
