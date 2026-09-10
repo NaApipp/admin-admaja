@@ -15,15 +15,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://admin.admajaskanifo.org"),
 
-  // Tittle
-  title: "Admin Admaja",
-  description: "Dashboard Admin Admaja",
+  // Title
+  title: "Dashboard Admin Admaja",
+  description:
+    "Sistem Manajemen & Dashboard Resmi Paskibra SMKN 4 Kendal (Admaja). Kelola data anggota, presensi kegiatan, pemilu ketua organisasi, dan administrasi internal.",
 
   // category
   category: "information",
 
   // Informasi pembuat
-  authors: [{ name: "Nabil Arif", url: "https://appsporto.vercel.app" }],
+  authors: [{ name: "Nabil Arif", url: "https://appsporto.my.id" }],
   creator: "Nabil Arif",
   publisher: "Adika Mahdi Jaya",
 
@@ -38,12 +39,13 @@ export const metadata: Metadata = {
 
   openGraph: {
     title: "Dashboard Admin Admaja", // Judul saat di-share
-    description: "Dashboard Admin Admaja", // Deskripsi saat di-share
+    description:
+      "Sistem Manajemen & Dashboard Resmi Paskibra SMKN 4 Kendal (Admaja). Kelola data anggota, presensi kegiatan, pemilu ketua organisasi, dan administrasi internal.", // Deskripsi saat di-share
     url: "https://admin.admajaskanifo.org", // URL utama
     siteName: "Admin Admaja",
     images: [
       {
-        url: "/logo-v2.png", // Gambar preview
+        url: "/og-image.png", // Gambar preview
         width: 1200,
         height: 630,
         alt: "Preview Image",
@@ -57,8 +59,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image", // tipe card
     title: "Dashboard Admin Admaja",
-    description: "Dashboard Management System Milik Admaja",
-    images: ["/logo-v2.png"],
+    description:
+      "Sistem Manajemen & Dashboard Resmi Paskibra SMKN 4 Kendal (Admaja).",
+    images: ["/og-image.png"],
     creator: "@n_apipppp",
   },
 };
