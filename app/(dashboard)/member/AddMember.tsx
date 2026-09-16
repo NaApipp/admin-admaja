@@ -321,11 +321,12 @@ export default function AddMember({ onSuccess }: AddMemberProps) {
                     onChange={handleChange}
                     className="w-full bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#14236F] dark:focus:ring-blue-500 transition-all cursor-pointer"
                   >
+                    <option value="">Pilih Kelas</option>
                     {/* Option Menu Kelas */}
                     {/* Kelas x */}
-                    <option value="X RPL 1">X RPL 1</option>
-                    <option value="X RPL 2">X RPL 2</option>
-                    <option value="X RPL 3">X RPL 3</option>
+                    <option value="X PPLG 1">X PPLG 1</option>
+                    <option value="X PPLG 2">X PPLG 2</option>
+                    <option value="X PPLG 3">X PPLG 3</option>
                     <option value="X TKJ 1">X TKJ 1</option>
                     <option value="X TKJ 2">X TKJ 2</option>
                     <option value="X KULINER 2">X KULINER 2</option>
