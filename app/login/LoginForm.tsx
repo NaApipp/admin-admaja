@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, User } from "lucide-react";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -42,8 +42,6 @@ export default function LoginForm() {
       }
 
       setSuccess("Login berhasil! Mengalihkan...");
-
-      // Simpan data user ke localStorage atau context jika diperlukan
       sessionStorage.setItem("user", JSON.stringify(data.user));
 
       setTimeout(() => {
@@ -65,42 +63,75 @@ export default function LoginForm() {
 Saya mengalami kendala saat mencoba login ke dashboard admin admaja. Apakah bisa dibantu untuk mengecek dan mengatasi kendala tersebut?
 
 Terima kasih atas bantuannya.`;
-
   const whatsappUrl = `https://wa.me/6289531310903?text=${encodeURIComponent(
     message,
   )}`;
 
   return (
-    <div className="flex items-center justify-center px-4 py-12 min-h-screen bg-main">
-      <div className="max-w-md w-full">
-        <div className="bg-sec rounded-lg shadow-xl overflow-hidden">
-          <div className="p-8">
-            <h2 className="text-center text-xl md:text-2xl font-extrabold text-white">
-              Dashboard Admin <span className="text-[#FF0000]">Admaja</span>
+    <section className="flex min-h-screen items-center justify-center bg-slate-50 px-5 py-12 sm:px-8 lg:px-12">
+      <div className="w-full max-w-md">
+        <div className="mb-8 lg:hidden flex items-center">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-[#dbeafe]">
+            <img
+              src="https://admajaskanifo.org/logo-v2.png"
+              alt="Logo Admaja"
+            />
+          </div>
+          <span>
+            <p className=" text-xs font-bold tracking-[0.2em] text-[#1E3E62]">
+            ADMAJA
+          </p>
+          <p className=" text-sm text-slate-500">Paskibra SMKN 4 Kendal</p>
+          </span>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/[0.06] sm:p-9">
+          <div className="mb-8">
+            <p className="text-sm font-semibold text-[#1E3E62]">
+              DASHBOARD ADMIN
+            </p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#101320] sm:text-3xl">
+              Selamat datang
             </h2>
-            <p className="mt-4 text-center text-gray-400">Silahkan Login</p>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Masuk untuk melanjutkan pengelolaan organisasi Admaja.
+            </p>
+          </div>
 
-            {error && (
-              <div className="mt-4 p-3 bg-red-500/20 border border-red-500 text-red-500 rounded-md text-sm text-center">
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="mt-4 p-3 bg-green-500/20 border border-green-500 text-green-500 rounded-md text-sm text-center">
-                {success}
-              </div>
-            )}
+          {error && (
+            <div
+              role="alert"
+              className="mb-5 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700"
+            >
+              {error}
+            </div>
+          )}
+          {success && (
+            <div
+              role="status"
+              className="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700"
+            >
+              {success}
+            </div>
+          )}
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-              <div className="space-y-4">
-                {/* name Field */}
-                <div className="relative flex items-center rounded-lg border border-[#3b5299] bg-transparent focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400 transition-all duration-200">
-                  <div className="absolute left-3.5 flex items-center pointer-events-none text-slate-400">
-                    <User className="w-5 h-5 stroke-[1.75]" />
-                  </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="username"
+                  className="mb-2 block text-sm font-medium text-slate-700"
+                >
+                  Username
+                </label>
+                <div className="relative flex items-center rounded-xl border border-slate-300 bg-white transition-colors focus-within:border-[#1E3E62] focus-within:ring-4 focus-within:ring-[#1E3E62]/10">
+                  <User
+                    aria-hidden="true"
+                    className="absolute left-3.5 h-5 w-5 text-slate-400"
+                  />
                   <input
-                    placeholder="Username"
-                    className="w-full bg-transparent py-3 pl-11 pr-4 text-white placeholder:text-slate-400 text-sm focus:outline-none"
+                    className="w-full rounded-xl bg-transparent py-3.5 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                    placeholder="Masukkan username"
                     required
                     autoComplete="username"
                     type="text"
@@ -110,15 +141,23 @@ Terima kasih atas bantuannya.`;
                     onChange={handleChange}
                   />
                 </div>
+              </div>
 
-                {/* Password Field */}
-                <div className="relative flex items-center rounded-lg border border-[#3b5299] bg-transparent focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400 transition-all duration-200">
-                  <div className="absolute left-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Lock className="w-5 h-5 stroke-[1.75]" />
-                  </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-medium text-slate-700"
+                >
+                  Kata sandi
+                </label>
+                <div className="relative flex items-center rounded-xl border border-slate-300 bg-white transition-colors focus-within:border-[#1E3E62] focus-within:ring-4 focus-within:ring-[#1E3E62]/10">
+                  <Lock
+                    aria-hidden="true"
+                    className="absolute left-3.5 h-5 w-5 text-slate-400"
+                  />
                   <input
-                    placeholder="Password"
-                    className="w-full bg-transparent py-3 pl-11 pr-11 text-white placeholder:text-slate-400 text-sm focus:outline-none"
+                    placeholder="Masukkan kata sandi"
+                    className="w-full rounded-xl bg-transparent py-3.5 pl-11 pr-12 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
                     required
                     autoComplete="current-password"
                     type={showPassword ? "text" : "password"}
@@ -130,7 +169,7 @@ Terima kasih atas bantuannya.`;
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 flex items-center text-slate-400 hover:text-white transition-colors focus:outline-none cursor-pointer"
+                    className="absolute right-1.5 flex h-10 w-10 items-center justify-center rounded-lg text-slate-400 transition-colors hover:text-[#1E3E62] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3E62]"
                     aria-label={
                       showPassword
                         ? "Sembunyikan kata sandi"
@@ -138,52 +177,47 @@ Terima kasih atas bantuannya.`;
                     }
                   >
                     {showPassword ? (
-                      <EyeOff className="w-5 h-5 stroke-[1.75]" />
+                      <EyeOff aria-hidden="true" className="h-5 w-5" />
                     ) : (
-                      <Eye className="w-5 h-5 stroke-[1.75]" />
+                      <Eye aria-hidden="true" className="h-5 w-5" />
                     )}
                   </button>
                 </div>
               </div>
+            </div>
 
-              <div className="flex items-center justify-end">
-                <div className="text-sm">
-                  <p className="font-medium text-white cursor-pointer">
-                    Lupa Password?{" "}
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white"
-                    >
-                      Hubungi Developer
-                    </a>
-                  </p>
-                </div>
-              </div>
+            <div className="flex justify-end text-sm">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-[#1E3E62] underline-offset-4 hover:underline"
+              >
+                Lupa kata sandi?
+              </a>
+            </div>
 
-              <div>
-                <button
-                  disabled={loading}
-                  className={`group relative w-full flex justify-center py-3 px-4 
-                            border border-transparent text-sm font-semibold
-                              text-[#14236F] bg-white hover:bg-white/80 focus:outline-none 
-                              focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                                loading ? "opacity-50 cursor-not-allowed" : ""
-                              }`}
-                  type="submit"
-                >
-                  {loading ? "Memproses..." : "Masuk"}
-                </button>
-              </div>
-            </form>
-          </div>
+            <button
+              disabled={loading}
+              className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1E3E62] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1E3E62]/20 transition-colors hover:bg-[#173451] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E3E62]/25 disabled:cursor-not-allowed disabled:opacity-60"
+              type="submit"
+            >
+              {loading ? "Memproses..." : "Masuk ke dashboard"}
+              {!loading && (
+                <ArrowRight
+                  aria-hidden="true"
+                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                />
+              )}
+            </button>
+          </form>
         </div>
-        <div className="px-8 py-4 text-center flex justify-center gap-2">
-          <span className="text-white">Belum punya akun?</span>{" "}
-          <p className="font-medium text-[#FFDDB5]">Hubungi Admin</p>
-        </div>
+
+        <p className="mt-6 text-center text-sm text-slate-500">
+          Belum memiliki akun?{" "}
+          <span className="font-medium text-[#1E3E62]">Hubungi admin.</span>
+        </p>
       </div>
-    </div>
+    </section>
   );
 }
