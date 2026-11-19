@@ -39,6 +39,7 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [label, setLabel] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [author, setAuthor] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -190,6 +191,7 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
     setTitle("");
     setContent("");
     setLabel("");
+    setSelectedCategory("");
     handleRemoveImage();
     setFieldErrors({});
     setGeneralError(null);
@@ -234,7 +236,9 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
           setFieldErrors(backendErrors);
           setGeneralError("Harap periksa kembali isian formulir.");
         } else {
-          setGeneralError(data.error || "Gagal menyimpan konten. Silakan coba lagi.");
+          setGeneralError(
+            data.error || "Gagal menyimpan konten. Silakan coba lagi.",
+          );
         }
         return;
       }
@@ -248,7 +252,8 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
       }
     } catch (err: any) {
       setGeneralError(
-        err?.message || "Terjadi kesalahan jaringan atau server tidak merespons."
+        err?.message ||
+          "Terjadi kesalahan jaringan atau server tidak merespons.",
       );
     } finally {
       setLoading(false);
@@ -266,7 +271,8 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                 Tambah Konten Baru
               </h2>
               <p className="text-sm text-blue-100/80 mt-1">
-                Publikasikan artikel, berita, atau informasi terkini untuk Portal Admaja
+                Publikasikan artikel, berita, atau informasi terkini untuk
+                Portal Admaja
               </p>
             </div>
           </div>
@@ -357,19 +363,10 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                 <div className="flex justify-between items-center mb-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                     <Tag className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                    Label / Kategori <span className="text-red-500">*</span>
+                    Kategori Content <span className="text-red-500">*</span>
                   </label>
-                  <span
-                    className={`text-xs ${
-                      label.length > MAX_CHARS
-                        ? "text-red-500 font-bold"
-                        : "text-slate-400"
-                    }`}
-                  >
-                    {label.length}/{MAX_CHARS}
-                  </span>
                 </div>
-                <input
+                {/* <input
                   type="text"
                   value={label}
                   maxLength={MAX_CHARS}
@@ -389,10 +386,84 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                       ? "border-red-500 ring-2 ring-red-500/20"
                       : "border-slate-200 dark:border-gray-700 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20"
                   }`}
-                />
+                /> */}
+                <select
+                  name="category"
+                  id="category"
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSelectedCategory(val);
+                    if (val === "Lainnya") {
+                      setLabel("");
+                    } else {
+                      setLabel(val);
+                    }
+                    if (fieldErrors.label) {
+                      setFieldErrors((prev) => {
+                        const copy = { ...prev };
+                        delete copy.label;
+                        return copy;
+                      });
+                    }
+                  }}
+                  className={`w-full px-4 py-2.5 rounded-xl border text-sm transition-all outline-none bg-slate-50 dark:bg-gray-800 text-slate-900 dark:text-white ${
+                    fieldErrors.label && !selectedCategory
+                      ? "border-red-500 ring-2 ring-red-500/20"
+                      : "border-slate-200 dark:border-gray-700 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20"
+                  }`}
+                >
+                  <option value="">Pilih Label</option>
+                  <option value="Berita">Berita</option>
+                  <option value="Kegiatan">Kegiatan</option>
+                  <option value="Pengumuman">Pengumuman</option>
+                  <option value="Prestasi">Prestasi</option>
+                  <option value="Edukasi">Edukasi</option>
+                  <option value="Dokumentasi">Dokumentasi</option>
+                  <option value="Latihan Rutin">Latihan Rutin</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+
+                {selectedCategory === "Lainnya" && (
+                  <div className="mt-2.5 space-y-1">
+                    <input
+                      type="text"
+                      value={label}
+                      maxLength={MAX_CHARS}
+                      onChange={(e) => {
+                        setLabel(e.target.value);
+                        if (fieldErrors.label) {
+                          setFieldErrors((prev) => {
+                            const copy = { ...prev };
+                            delete copy.label;
+                            return copy;
+                          });
+                        }
+                      }}
+                      placeholder="Ketik label kategori..."
+                      className={`w-full px-4 py-2.5 rounded-xl border text-sm transition-all outline-none bg-slate-50 dark:bg-gray-800 text-slate-900 dark:text-white ${
+                        fieldErrors.label
+                          ? "border-red-500 ring-2 ring-red-500/20"
+                          : "border-slate-200 dark:border-gray-700 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20"
+                      }`}
+                      autoFocus
+                    />
+                    <div className="flex justify-end">
+                      <span
+                        className={`text-xs ${
+                          label.length > MAX_CHARS
+                            ? "text-red-500 font-bold"
+                            : "text-slate-400"
+                        }`}
+                      >
+                        {label.length}/{MAX_CHARS}
+                      </span>
+                    </div>
+                  </div>
+                )}
 
                 {/* Quick Selection Tags */}
-                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                {/* <div className="flex flex-wrap items-center gap-1.5 mt-2">
                   <span className="text-[11px] text-slate-400">Pilihan cepat:</span>
                   {COMMON_LABELS.map((item) => (
                     <button
@@ -417,7 +488,7 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                       {item}
                     </button>
                   ))}
-                </div>
+                </div> */}
 
                 {fieldErrors.label && (
                   <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
@@ -479,7 +550,8 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                 <div className="flex justify-between items-center mb-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                    Isi Konten / Deskripsi <span className="text-red-500">*</span>
+                    Isi Konten / Deskripsi{" "}
+                    <span className="text-red-500">*</span>
                   </label>
                   <span
                     className={`text-xs ${
@@ -557,8 +629,8 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                     isDragging
                       ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 scale-[1.01]"
                       : fieldErrors.image
-                      ? "border-red-300 dark:border-red-900 bg-red-50/30 dark:bg-red-950/10 hover:border-red-400"
-                      : "border-slate-200 dark:border-gray-700 bg-slate-50/50 dark:bg-gray-800/40 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-gray-800"
+                        ? "border-red-300 dark:border-red-900 bg-red-50/30 dark:bg-red-950/10 hover:border-red-400"
+                        : "border-slate-200 dark:border-gray-700 bg-slate-50/50 dark:bg-gray-800/40 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm">
@@ -568,7 +640,8 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                     Klik untuk memilih atau seret gambar ke sini
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
-                    Mendukung JPG, PNG, atau WebP. Maksimal ukuran file 2MB untuk menjaga performa portal.
+                    Mendukung JPG, PNG, atau WebP. Maksimal ukuran file 2MB
+                    untuk menjaga performa portal.
                   </p>
                   <button
                     type="button"
@@ -601,7 +674,9 @@ export default function ContentForm({ onSuccess, onCancel }: ContentFormProps) {
                     <div className="truncate pr-2">
                       <p className="font-medium truncate">{imageFile?.name}</p>
                       <p className="text-slate-400">
-                        {imageFile && (imageFile.size / (1024 * 1024)).toFixed(2)} MB
+                        {imageFile &&
+                          (imageFile.size / (1024 * 1024)).toFixed(2)}{" "}
+                        MB
                       </p>
                     </div>
                     <button
